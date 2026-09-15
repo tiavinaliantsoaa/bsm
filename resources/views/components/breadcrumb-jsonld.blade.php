@@ -14,7 +14,7 @@
 
 <script type="application/ld+json">
 {!! json_encode([
-    '@context' => 'https://schema.org',
+    '@'.'context' => 'https://schema.org',
     '@type'    => 'BreadcrumbList',
     'itemListElement' => $itemListElement,
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}

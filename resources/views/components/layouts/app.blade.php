@@ -42,7 +42,7 @@
     {{-- Organization + LocalBusiness JSON-LD, present on every page -------- --}}
     <script type="application/ld+json">
     {!! json_encode([
-        '@context' => 'https://schema.org',
+        '@'.'context' => 'https://schema.org',
         '@type'    => 'ProfessionalService',
         'name'     => $company['name'],
         'description' => $company['tagline'],

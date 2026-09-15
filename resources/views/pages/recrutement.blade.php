@@ -26,7 +26,7 @@
     </style>
     <script type="application/ld+json">
     {!! json_encode([
-        '@context'   => 'https://schema.org',
+        '@'.'context'   => 'https://schema.org',
         '@type'      => 'FAQPage',
         'mainEntity' => array_map(fn (array $item) => [
             '@type'          => 'Question',
