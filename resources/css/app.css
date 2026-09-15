@@ -1,0 +1,247 @@
+@import '@fontsource/source-serif-4/latin-ext-400.css';
+@import '@fontsource/source-serif-4/latin-400.css';
+@import '@fontsource/source-serif-4/latin-ext-400-italic.css';
+@import '@fontsource/source-serif-4/latin-400-italic.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Gravity — body (charte : Regular). OFL, Vincenzo Vuono. */
+@font-face {
+    font-family: 'Gravity';
+    src: url('../fonts/Gravity-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Gravity';
+    src: url('../fonts/Gravity-Italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Gravity';
+    src: url('../fonts/Gravity-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Gravity';
+    src: url('../fonts/Gravity-BoldItalic.woff2') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+@layer base {
+    :root {
+        --rule: rgba(11, 14, 21, 0.08);
+    }
+
+    html {
+        scroll-behavior: smooth;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+        @apply bg-paper-50 text-ink-700 font-sans font-normal antialiased;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-display font-normal;
+    }
+
+    :focus-visible {
+        outline: 2px solid theme('colors.brand.500');
+        outline-offset: 3px;
+        border-radius: 3px;
+    }
+
+    ::selection {
+        background: theme('colors.brand.500');
+        color: white;
+    }
+
+    hr {
+        border: 0;
+        border-top: 1px solid var(--rule);
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+@layer components {
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3
+               font-sans text-sm font-bold tracking-wide uppercase
+               transition duration-300 ease-out-expo will-change-transform;
+    }
+    .btn-primary {
+        @apply btn bg-brand-500 text-white shadow-brand hover:bg-brand-600 hover:-translate-y-0.5;
+    }
+    .btn-ghost {
+        @apply btn border border-ink-700/15 text-ink-700 hover:border-ink-700/40 hover:bg-white;
+    }
+    .btn-light {
+        @apply btn bg-white text-ink-800 hover:bg-paper-100;
+    }
+
+    .eyebrow {
+        @apply font-display text-eyebrow uppercase text-brand-600;
+    }
+
+    .rule-label {
+        @apply font-sans text-xs uppercase tracking-[0.2em] text-ink-400;
+    }
+
+    .section {
+        @apply py-20 md:py-28;
+    }
+    .section-tight {
+        @apply py-14 md:py-20;
+    }
+
+    .card {
+        @apply relative bg-white rounded-2xl shadow-soft transition duration-300 ease-out-expo;
+    }
+    .card:hover {
+        @apply shadow-lift -translate-y-1;
+    }
+
+    .prose-editorial :where(p) {
+        @apply font-sans text-ink-500 leading-relaxed;
+    }
+    .prose-editorial :where(h2) {
+        @apply font-display font-normal text-ink-800 tracking-tight;
+    }
+
+    .disclosure > summary {
+        list-style: none;
+        cursor: pointer;
+    }
+    .disclosure > summary::-webkit-details-marker,
+    .disclosure > summary::marker {
+        display: none;
+        content: none;
+    }
+    .disclosure[open] > summary .disclosure-icon {
+        transform: rotate(45deg);
+    }
+
+    /* Vertical process rail (service pages) — numbered nodes on a spine, cards alternate. */
+    .process-rail {
+        position: relative;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .process-rail::before {
+        content: '';
+        position: absolute;
+        top: 1.25rem;
+        bottom: 1.25rem;
+        left: 1.25rem;
+        width: 2px;
+        background: theme('colors.brand.500');
+    }
+    .process-rail__item {
+        display: grid;
+        grid-template-columns: 2.5rem minmax(0, 1fr);
+        column-gap: 1rem;
+        align-items: center;
+        padding-block: 0.85rem;
+    }
+    .process-rail__node {
+        grid-column: 1;
+        grid-row: 1;
+        position: relative;
+        z-index: 1;
+        display: grid;
+        place-items: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 9999px;
+        background: theme('colors.brand.500');
+        color: #fff;
+        font-family: theme('fontFamily.display');
+        font-size: 1.05rem;
+        line-height: 1;
+    }
+    .process-rail__card {
+        grid-column: 2;
+        grid-row: 1;
+        position: relative;
+        padding: 1.15rem 1.35rem;
+        background: theme('colors.paper.50');
+        border: 1px solid theme('colors.ink.100');
+        border-radius: 12px;
+    }
+    @media (min-width: 640px) {
+        .process-rail::before {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .process-rail__item {
+            grid-template-columns: minmax(0, 1fr) 2.5rem minmax(0, 1fr);
+            column-gap: 0;
+        }
+        .process-rail__node {
+            grid-column: 2;
+        }
+        .process-rail__item.is-right .process-rail__card {
+            grid-column: 3;
+            margin-inline-start: 1.35rem;
+        }
+        .process-rail__item.is-left .process-rail__card {
+            grid-column: 1;
+            margin-inline-end: 1.35rem;
+        }
+        .process-rail__card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 1.35rem;
+            height: 2px;
+            background: theme('colors.brand.500');
+        }
+        .process-rail__item.is-right .process-rail__card::before {
+            left: -1.35rem;
+        }
+        .process-rail__item.is-left .process-rail__card::before {
+            right: -1.35rem;
+        }
+    }
+}
+
+@layer utilities {
+    .measure {
+        max-width: 68ch;
+    }
+    .measure-tight {
+        max-width: 56ch;
+    }
+
+    .stripe-brand {
+        background-image: linear-gradient(115deg, transparent 55%, theme('colors.brand.500') 55% 58%, transparent 58%);
+    }
+
+    .dot-divider > * + *::before {
+        content: '·';
+        @apply mx-2 text-ink-300;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+    }
+}

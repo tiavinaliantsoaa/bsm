@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" role="img" aria-label="BSM-Services">
+  <rect x="0" y="4" width="40" height="40" rx="20" fill="#0B0E15"/>
+  <text x="20" y="30" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="14" font-weight="900" fill="#FFFFFF" letter-spacing="0.5">BSM</text>
+  <text x="52" y="30" font-family="Roboto, Arial, sans-serif" font-size="18" font-weight="700" fill="#0B0E15">BSM</text>
+  <circle cx="97" cy="26" r="2.2" fill="#2F65AF"/>
+  <text x="103" y="30" font-family="Roboto, Arial, sans-serif" font-size="18" font-weight="700" fill="#0B0E15">Services</text>
+</svg>
