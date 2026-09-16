@@ -6,20 +6,20 @@ return [
     'default' => env('LOG_CHANNEL', 'stack'),
     'channels' => [
         'stack' => [
-            'driver'   => 'stack',
+            'driver' => 'stack',
             'channels' => ['single'],
             'ignore_exceptions' => false,
         ],
         'single' => [
             'driver' => 'single',
-            'path'   => storage_path('logs/laravel.log'),
-            'level'  => env('LOG_LEVEL', 'debug'),
+            'path' => storage_path('logs/laravel.log'),
+            'level' => env('LOG_LEVEL', 'warning'),
         ],
         'stderr' => [
-            'driver'  => 'monolog',
-            'level'   => env('LOG_LEVEL', 'debug'),
+            'driver' => 'monolog',
+            'level' => env('LOG_LEVEL', 'warning'),
             'handler' => StreamHandler::class,
-            'with'    => ['stream' => 'php://stderr'],
+            'with' => ['stream' => 'php://stderr'],
         ],
     ],
 ];

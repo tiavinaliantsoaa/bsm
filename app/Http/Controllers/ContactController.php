@@ -8,6 +8,7 @@ use App\Mail\ContactMessage;
 use App\Support\SafeUploadedFilename;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ContactController extends Controller
@@ -39,12 +40,17 @@ class ContactController extends Controller
         try {
             Mail::to(config('mail.to.address'))->send(new ContactMessage($data, $cv));
         } catch (\Throwable $e) {
-            logger()->warning('Contact form email failed', [
-                'exception' => $e->getMessage(),
-                'email' => $data['email'] ?? null,
-                'motif' => $data['motif'] ?? null,
-                'cv' => $cv['name'] ?? null,
-            ]);
+            if (is_array($cv) && isset($cv['path'])) {
+                Storage::disk('local')->delete($cv['path']);
+            }
+
+            report($e);
+
+            return back()
+                ->withInput($request->except('cv'))
+                ->withErrors([
+                    'content' => 'Envoi impossible pour le moment. Réessayez plus tard.',
+                ]);
         }
 
         $query = [];

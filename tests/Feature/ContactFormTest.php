@@ -85,6 +85,58 @@ class ContactFormTest extends TestCase
         });
     }
 
+    public function test_mail_failure_does_not_confirm_success_and_deletes_the_cv(): void
+    {
+        Storage::fake('local');
+
+        Mail::shouldReceive('to')->once()->andThrow(new \RuntimeException('SMTP down'));
+
+        $upload = UploadedFile::fake()->createWithContent(
+            'cv.pdf',
+            "%PDF-1.4\n1 0 obj<<>>endobj\ntrailer<<>>\n%%EOF\n",
+        );
+
+        $response = $this->from('/contact?motif=candidature')->post('/contact', $this->payload([
+            'motif' => 'candidature',
+            'poste' => 'commercial',
+            'cv' => $upload,
+        ]));
+
+        $response->assertRedirect('/contact?motif=candidature');
+        $response->assertSessionHasErrors('content');
+        $response->assertSessionMissing('status');
+        $this->assertSame([], Storage::disk('local')->allFiles());
+    }
+
+    public function test_filled_honeypot_is_rejected(): void
+    {
+        Mail::fake();
+
+        $response = $this->from('/contact')->post('/contact', $this->payload([
+            'website' => 'https://spam.example',
+        ]));
+
+        $response->assertRedirect('/contact');
+        $response->assertSessionHasErrors('website');
+        Mail::assertNothingSent();
+    }
+
+    public function test_contact_form_is_rate_limited(): void
+    {
+        Mail::fake();
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->from('/contact')->post('/contact', $this->payload())->assertRedirect(route('contact.show'));
+        }
+
+        $this->from('/contact')->post('/contact', $this->payload())->assertStatus(429);
+    }
+
+    public function test_health_endpoint_is_not_public(): void
+    {
+        $this->get('/up')->assertNotFound();
+    }
+
     /**
      * @param  array<string, mixed>  $overrides
      * @return array<string, mixed>

@@ -5,6 +5,9 @@
 
     RewriteEngine On
 
+    # Deny dotfiles (.env, .git, …) except ACME / SSL challenges.
+    RewriteRule "(?:^|/)\.(?!well-known)" - [F]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -19,6 +22,16 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+<FilesMatch "^\.env">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
 
 # Long cache for hashed assets built by Vite
 <IfModule mod_headers.c>
